@@ -51,3 +51,28 @@ Additionally, DeepMedic requires data normalization to a distribution with a mea
 
 For more specific requirements of data preprocessing, please refer to the DeepMedic GitHub page.
 
+## Code Tutorial
+
+### Overview
+DeepMedic is built using the TensorFlow deep learning framework, specifically version 1.7.0. 
+
+### Training
+- **trainSession.py**: Creates the computation graph and session, initializes model parameters. 
+- **training.py**: Provides operations and `feeds_dict`, runs the session, executes operations, and returns results. The computation graph represents the entire architecture of the 3D CNN model. Relevant files include `cnn3d.py`, `pathways.py`, and `layers.py`. The construction of CNN in DeepMedic is divided into three levels: building different types of layers, constructing a pathway from multiple layers, and combining different types of pathways to form the final 3D CNN model.
+
+- **Layers.py**: Contains three classes defining properties and operations for Convolutional Layer (`ConvLayer`), Fully Connected Layer (`FcLayer`), and Softmax Layer (`SoftmaxLayer`). The `makeLayer` function creates the entire convolutional layer and its parameters, with detailed operations defined in `ops.py`.
+
+- **Pathways.py**: Defines three types of pathways: Normal Pathway, Subsampled Pathway, and Fully Connected Pathway (consisting only of fully connected layers). The core function `makeLayersOfThisPathwayAndReturnDimensionsOfOutputFM` creates layer objects as defined in `Layers.py`, connects the layers in a pathway, and sets inputs and outputs. The function `makeResidualConnectionBetweenLayersAndReturnOutput` (defined outside the class) creates residual connections between specific layers. For Subsampled Pathway, the function `upsampleOutputToNormalRes` upsamples the final output to match the shape of the normal pathway's output.
+
+- **Cnn3d.py**: The `make_cnn_model` function creates objects of classes defined in `pathways.py`, constructs each pathway, and combines the outputs of normal and subsampled pathways to create the FcPathway. The final output of the model's forward propagation is obtained by creating the Softmax Layer.
+
+- **Trainer.py**: Calls functions from `cost_functions.py` to define the cost function, and from `optimizers.py` to create the optimizer. It applies the optimizer and loss function to perform update operations, returning these operations to `cnn3d.py`.
+
+- **Training.py**: The function `doTrainOrValidationOnBatchesAndReturnMeanAccuraciesOfSubepoch` executes the TensorFlow session and prints accuracy, dice score, etc. The `do_training` function controls the entire training process, loading images from memory for each subepoch and sampling them to create segments for TensorFlow session.
+
+### Sampling and Model Input
+- **Sampling.py**: Defines functions related to loading images and extracting segments. It involves random selection of images, sampling based on specified methods (foreground-background ratio), and intensity augmentation as set in the config files. The file also discusses the use of weightMaps for advanced sampling methods.
+
+### ConfigParsing
+This folder contains files responsible for reading configuration parameters from config files, organizing these parameters, and passing them to the `make_3d_cnn` function in `cnn3d.py` and the `do_training` function in `training.py`.
+
