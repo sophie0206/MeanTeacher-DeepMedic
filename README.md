@@ -6,8 +6,9 @@ The code is using on [DeepMedic](https://github.com/deepmedic/deepmedic) as the 
 DeepMedic consists of several methods, each in its own directory:
 
 - `deepmedicMT`: Contains code for the Mean Teacher method.
-- `deepmedicUDA`: Contains code for the Unsupervised Domain Adaptation method.
-- `deepmedicEN`: Contains code for the Evaluation Network method.
+- `deepmedicUDA`: Contains code for the Unsupervised Domain Adaptation method proposed in [Unsupervised domain adaptation in brain lesion segmentation with adversarial networks](https://arxiv.org/abs/1612.08894)
+- `deepmedicEN`: Contains code for the Evaluation Network method proposed in [
+Deep Adversarial Networks for Biomedical Image Segmentation Utilizing Unannotated Images](https://link.springer.com/chapter/10.1007/978-3-319-66179-7_47)
 - `deepmedicO`: Contains the original DeepMedic code.
 
 Each folder contains an executable file named `deepMedicRun`, which is used to run the entire model. 
